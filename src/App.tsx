@@ -67,7 +67,7 @@ function App() {
           )}
         </Box>
         <Text fontWeight="bold" fontSize="2xl" mb={4}>Tax Calculator</Text>
-        <Stack spacing={4} width="100%">
+        <Stack width="100%">
           <Input
             placeholder="Annual income"
             variant="outline"
