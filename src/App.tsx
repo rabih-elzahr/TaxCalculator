@@ -80,12 +80,12 @@ function App() {
 
         <Flex alignItems="center">
           <Text fontWeight="bold" fontSize="2xl" marginRight="6px"><LuCalculator /></Text>
-          <Text fontWeight="bold" fontSize="2xl">Income Tax Calculator</Text>
+          <Text fontWeight="bold" fontSize="xl">Income Tax Calculator</Text>
         </Flex>
 
         <ColorModeButton />
       </Flex>
-      <Flex height="100vh" width="100%" justifyContent="center" alignItems="center">
+      <Flex height="100vh" width="100%" justifyContent="center" alignItems="center" padding="2rem">
         <Fieldset.Root size="lg" maxW="md" onKeyDown={handleKeyDown}>
           <Stack>
             <Fieldset.Legend>Income Tax Calculator</Fieldset.Legend>
