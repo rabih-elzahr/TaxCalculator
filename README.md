@@ -48,3 +48,10 @@ export default tseslint.config({
   },
 })
 ```
+## Deployment:
+
+To deploy production builds using Vercel run the following commands in the main project directory:
+
+- `npm run build`
+- `vercel`
+- Link to access deployed version will be displayed in the terminal
