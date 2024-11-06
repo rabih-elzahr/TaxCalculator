@@ -1,7 +1,13 @@
 import { useState } from "react";
-import { Flex, Text, Input, Stack, Button, Spinner, Box } from "@chakra-ui/react";
+import {
+  Flex, Text, Input, Stack, Button, Spinner, Box, Fieldset, Link, Image
+} from "@chakra-ui/react";
 import { Alert } from "@/components/ui/alert"
 import { getTaxRateByYear } from "./api/Tax/Tax";
+import { ColorModeButton } from "@/components/ui/color-mode"
+import { toaster } from "@/components/ui/toaster"
+import { Field } from "@/components/ui/field"
+import { LuCalculator } from "react-icons/lu";
 
 function App() {
   const [annualIncome, setAnnualIncome] = useState("");
@@ -56,7 +62,10 @@ function App() {
       setIsLoading(false);
     } catch (error: any) {
       setIsLoading(false);
-      setError(error.message || "An error occurred while calculating the tax.");
+      toaster.create({
+        title: error.message || "An error occurred while calculating the tax.",
+        type: "error"
+      })
     }
   };
   const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -66,65 +75,105 @@ function App() {
   };
 
   return (
-    <Flex height="100vh" width="100%" justifyContent="center" alignItems="center">
-      <Flex flexDir="column" align="center" justify="center" width="320px" onKeyDown={handleKeyDown} height="448px">
-        <Box height="80px" width="100%" mb={4}>
-          {error ? (
-            <Alert status="error" title={error} />
-          ) : (
-            <Box height="80px" />
-          )}
-        </Box>
-        <Text fontWeight="bold" fontSize="2xl" mb={4}>Tax Calculator</Text>
-        <Stack width="100%">
-          <Input
-            placeholder="Annual income"
-            variant="outline"
-            value={annualIncome}
-            onChange={(e) => setAnnualIncome(e.target.value)}
-            type="number"
-          />
-          <Input
-            placeholder="Tax year"
-            variant="outline"
-            value={taxYear}
-            onChange={(e) => setTaxYear(e.target.value)}
-            type="number"
-          />
+    <>
+      <Flex width="100%" justifyContent="space-between" padding="6px 12px">
+
+        <Flex alignItems="center">
+          <Text fontWeight="bold" fontSize="2xl" marginRight="6px"><LuCalculator /></Text>
+          <Text fontWeight="bold" fontSize="2xl">Income Tax Calculator</Text>
+        </Flex>
+
+        <ColorModeButton />
+      </Flex>
+      <Flex height="100vh" width="100%" justifyContent="center" alignItems="center">
+        <Fieldset.Root size="lg" maxW="md" onKeyDown={handleKeyDown}>
+          <Stack>
+            <Fieldset.Legend>Income Tax Calculator</Fieldset.Legend>
+            <Fieldset.HelperText>
+              Income Tax Calculator is a simple app for quick tax calculations based on tax brackets and rates in Canada. For more information on tax brackets and rates visit <Link href="https://www.canada.ca/en/financial-consumer-agency/services/financial-toolkit/taxes/taxes-2/5.html">Canada Tax Brakets and Rates</Link> website.</Fieldset.HelperText>
+          </Stack>
+          <Image src="/canada-flag.webp" alt="Canadian flag representing tax calculations in Canada" />
+
+          <Fieldset.Content>
+
+            <Box height="40px" width="100%" marginBottom="12px" data-state="open" _open={{
+              animation: "fade-in 3s ease-out",
+            }}>
+              {error ? (
+                <Alert status="error" title={error} role="alert" aria-live="assertive" />
+              ) : (
+                <Box height="40px" />
+              )}
+            </Box>
+            <Field label="Annual Income ($CAD)">
+              <Input
+                id="annual-income"
+                placeholder="Example 25000"
+                variant="outline"
+                value={annualIncome}
+                onChange={(e) => setAnnualIncome(e.target.value)}
+                type="number"
+                aria-describedby="annual-income-helper"
+              />
+            </Field>
+
+            <Field label="Tax year">
+              <Input
+                id="tax-year"
+                placeholder="Example 2022"
+                variant="outline"
+                value={taxYear}
+                onChange={(e) => setTaxYear(e.target.value)}
+                type="number"
+                aria-describedby="tax-year-helper"
+              />
+            </Field>
+          </Fieldset.Content>
           <Button
             onClick={handleCalculateTax}
             colorScheme="blue"
             borderRadius="8px"
-            margin="2px 1px"
+            margin="12px 1px"
             disabled={isLoading}
+            aria-label="Submit annual income and tax year to calculate total tax"
           >
             Submit
           </Button>
-        </Stack>
 
-        {isLoading && <Spinner marginTop={4} />}
+          <Flex justifyContent="center">
+            <Box role="status" aria-live="polite">
+              {isLoading && (
+                <Flex alignItems="end">
+                  <Spinner marginTop={4} />
+                  <Text marginLeft="12px">Calculating...</Text>
+                </Flex>)}
+            </Box>
 
-        {totalTax !== null && (
-          <>
-            <Text mt={4} fontSize="xl" fontWeight="bold">
-              Total Tax: ${totalTax.toFixed(2)}
-            </Text>
-            <Text mt={2} fontSize="xl" fontWeight="medium">
-              Effective Rate: {effectiveRate?.toFixed(2)}%
-            </Text>
-            <Text mt={4} fontSize="xl" fontWeight="bold">
-              Taxes Owed Per Band:
-            </Text>
+            {totalTax !== null && (
+              <Flex flexDir="column" data-state="open" _open={{
+                animation: "fade-in 400ms ease-out",
+              }}>
+                <Text mt={4} fontSize="m" fontWeight="bold">
+                  Total Tax: ${totalTax.toFixed(2)}
+                </Text>
+                <Text mt={2} fontSize="m" fontWeight="medium">
+                  Effective Rate: {effectiveRate?.toFixed(2)}%
+                </Text>
+                <Text mt={4} fontSize="m" fontWeight="bold">
+                  Taxes Owed Per Band:
+                </Text>
 
-            {taxesPerBand.map((band, index) => (
-              <Text key={index} fontSize="xl" fontWeight="medium">
-                Rate: {band.rate * 100}% - Tax: ${band.amount.toFixed(2)}
-              </Text>
-            ))}
-          </>
-        )}
+                {taxesPerBand.map((band, index) => (
+                  <Text key={index} fontSize="m" fontWeight="medium">
+                    Rate: {band.rate * 100}% - Tax: ${band.amount.toFixed(2)}
+                  </Text>
+                ))}
+              </Flex>
+            )}
+          </Flex>
+        </Fieldset.Root>
       </Flex>
-    </Flex>
+    </>
   );
 }
 
