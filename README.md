@@ -1,11 +1,17 @@
 # Tax Calculator using React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Demo of the app can be found [here](https://tax-calculator-phi-eight.vercel.app/)
 
-Currently, two official plugins are available:
+## Running app locally
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+To run the app locally 
+- Navigate to src directoty
+- Type `npm run dev`
+- Access the app using browser `http://localhost:5174/`
+
+## Deploying a new version
+
+To build a new version run `npm run build` and to deploy to Vercel type simply type `Vercel` in the src directory.
 
 ## Expanding the ESLint configuration
 
@@ -48,10 +54,3 @@ export default tseslint.config({
   },
 })
 ```
-## Deployment:
-
-To deploy production builds using Vercel run the following commands in the main project directory:
-
-- `npm run build`
-- `vercel`
-- Link to access deployed version will be displayed in the terminal
