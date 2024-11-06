@@ -96,7 +96,7 @@ function App() {
 
           <Fieldset.Content>
 
-            <Box height="40px" width="100%" marginBottom="12px" data-state="open" _open={{
+            <Box height="40px" width="100%" marginBottom="1.5rem" data-state="open" _open={{
               animation: "fade-in 3s ease-out",
             }}>
               {error ? (
